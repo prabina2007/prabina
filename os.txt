@@ -1,0 +1,439 @@
+1.fcfs
+
+#include<stdio.h>
+
+void main()
+{
+	int p[20],bt[20],ct[20],tat[20],wt[20],n,prev_bt=0;
+	float sum_tat=0.0,sum_wt=0.0;
+
+	printf("Enter the no.of process:");
+	scanf("%d",&n);
+
+	printf("\nEnter the brust time:");
+	for(int i=0;i<n;i++)
+		scanf("%d",&bt[i]);
+
+	for(int i=0;i<n;i++)
+	{
+		prev_bt += bt[i];
+		ct[i]=prev_bt;
+		tat[i]=ct[i];
+		wt[i]=tat[i]-bt[i];
+	}
+
+
+	printf("\n\nprocess		AT		BT		CT		TAT		WT");
+	printf("\n-------		---		---		---		----		---");
+
+	for(int i=0;i<n;i++)
+	{
+
+
+		printf("\n  P%d		%d		%d		%d		%d		 %d",i+1,0,bt[i],ct[i],tat[i],wt[i]);
+
+		sum_tat+=tat[i];
+		sum_wt+=wt[i];
+	}
+
+	printf("\n\nAvg turn around time:%f",(float)sum_tat/n);
+	printf("\nAvg waiting time:%f\n",(float)sum_wt/n);
+
+}
+
+
+2.sjf
+
+#include<stdio.h>
+
+void main()
+{
+	int p[10],bt[10],ct[10],tat[10],wt[10],n,temp,min,i,j,pre_bt=0;
+	float sum_tat=0.0,sum_wt=0.0;
+
+	printf("Enter the no.of process:");
+	scanf("%d",&n);
+
+	printf("\nEnter the brust times:");
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&bt[i]);
+		p[i]=i+1;
+
+	}
+
+
+	for(i=0;i<n-1;i++)
+		for(j=i+1;j<n;j++)
+			if(bt[i]>bt[j])
+			{
+				temp=bt[i];
+				bt[i]=bt[j];
+				bt[j]=temp;
+
+				temp=p[i];
+				p[i]=p[j];
+				p[j]=temp;
+			}
+
+
+
+	for(i=0;i<n;i++)
+	{
+		pre_bt+=bt[i];
+		ct[i]=pre_bt;
+		tat[i]=ct[i];
+		wt[i]=tat[i]-bt[i];
+	}
+
+	
+	printf("\n\nprocess		AT		BT		CT		TAT		WT");
+	printf("\n-------		---		---		---		----		---");
+
+	for(int i=0;i<n;i++)
+	{
+
+
+		printf("\n  P%d		%d		%d		%d		%d		 %d",p[i],0,bt[i],ct[i],tat[i],wt[i]);
+
+		sum_tat+=tat[i];
+		sum_wt+=wt[i];
+	}
+	printf("\n\nAvg turn around time:%f",(float)sum_tat/n);
+	printf("\nAvg waiting time:%f\n",(float)sum_wt/n);
+}
+
+
+3.round_robin
+
+#include<stdio.h>
+
+void main()
+{
+	int bt[10],rm_bt[10],ct[10],tat[10],wt[10],n,total_time=0,i,j,tq,count=0;
+	float sum_tat=0.0,sum_wt=0.0;
+
+	printf("Enter no.of processes:");
+	scanf("%d",&n);
+
+	printf("\nEnter brust times:");
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&bt[i]);
+		rm_bt[i]=bt[i];
+	}
+
+	printf("\nEnter the time quantum:");
+	scanf("%d",&tq);
+
+	i=0;
+
+	while(1)
+	{
+		if(i==n)
+		    i=0;
+
+		if(rm_bt[i]>tq)
+		{
+			total_time+=tq;
+			rm_bt[i]=rm_bt[i]-tq;
+		}
+		else if( rm_bt[i]<=tq && rm_bt[i]!=0 )
+		{
+			total_time+=rm_bt[i];
+			rm_bt[i]=0;
+			ct[i]=total_time;
+			count++;
+		}
+
+
+		if(count==n)
+			break;
+
+		i++;
+
+	}
+
+	for(int i=0;i<n;i++)
+	{
+		tat[i]=ct[i];
+		wt[i]=tat[i]-bt[i];
+	}
+
+	printf("\n\nprocess		AT		BT		CT		TAT		WT");
+	printf("\n-------		---		---		---		----		---");
+
+	for(int i=0;i<n;i++)
+	{
+
+
+		printf("\n  P%d		%d		%d		%d		%d		 %d",i+1,0,bt[i],ct[i],tat[i],wt[i]);
+
+		sum_tat+=tat[i];
+		sum_wt+=wt[i];
+	}
+
+	printf("\n\nAvg turn around time:%f",(float)sum_tat/n);
+	printf("\nAvg waiting time:%f\n",(float)sum_wt/n);
+
+
+}
+
+
+4.basic_cal
+
+#shell script to perform tasks of a basic calculator
+
+read -p "Enter a integer number:" num1
+
+read -p "Enter a integer number:" num2
+
+echo 
+
+echo " chose ur option "
+
+echo "1.Addition"
+echo "2.Substraction"
+echo "3.Multiplication"
+echo "4.Division"
+
+read -p " Enter ur choice: " ch
+
+echo 
+
+case $ch in
+
+1)	echo "$num1 + $num2 = $((num1+num2))"
+	;;
+
+2)	echo "$num1 - $num2 = $((num1-num2))"
+	;;
+
+3)	echo "$num1 x $num2 = $((num1*num2))"
+	;;
+
+4)	echo "$num1 / $num2 = $((num1/num2))"
+	;;
+
+*)	echo "Invalid input!!!"
+
+esac
+
+
+5.factorial
+
+#shell script to find factorial of a number
+
+read -p " Enter a number: " num
+
+echo
+
+fact=1
+
+for (( i=1;i<=num;i++ ))
+do
+	fact=$((fact*i))
+
+done
+
+echo " Factorial of $num is $fact "
+
+echo
+
+
+6.fibonaci
+
+#shell script to generate fibonaci serise
+
+read -p " Enter how many terms :" n
+
+echo
+
+echo " The fibonaci serise upto $n terms :"
+a=0
+b=1
+
+for  (( i=1;i<=n;i++ ))
+do
+	echo -n " $a "
+	c=$((a+b))
+	a=$b
+	b=$c
+
+done
+
+echo
+
+
+7.gretest among three
+
+#shell script to find out gretest among three numbers
+
+read -p " Enter the 1st number: " a
+
+echo
+
+read -p " Enter the 2nd number: " b
+
+echo
+
+read -p " Enter the 3rd number: " c
+
+echo
+
+if (( a>b && a>c ))
+then
+	echo " $a is greater "
+
+elif (( b>a && b>c ))
+then
+	echo " $b is greater "
+
+elif (( c>a && c>b ))
+then
+	echo " $c is greater "
+else
+	echo " The numbers are equal "
+
+fi
+
+echo
+
+
+8.multiplicatin
+
+#shell script to print multiplication table of a number
+
+read -p " Enter a number: " num
+
+echo
+
+for (( i=1;i<=10;i++ ))
+do
+	echo " $num x $i = $((num*i)) "
+
+done
+
+echo
+
+
+9.prime
+
+#shell script to check whether a no entered via command line 
+#is prime or not
+
+num=$1
+
+check=1
+
+for (( i=2;i<=(num/2);i++ ))
+do
+	if (( num % i == 0 ))
+	then
+		check=0
+		break
+	fi
+
+done
+
+if (( check == 1 ))
+then
+	echo " $num is prime "
+
+else
+	echo " $num is not prime "
+
+fi
+
+
+10.sum of digits
+
+#shell scripr to find sum of digits of a number
+
+read -p  " Enter a number :" num
+
+echo
+
+sum=0
+
+while (( num != 0 ))
+do
+	r=$((num%10))
+	sum=$((sum+r))
+	num=$((num/10))
+
+done
+
+echo " Sum = $sum "
+
+
+11.fork same program same code
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        printf("Fork failed!\n");
+    } else {
+        printf("Process ID: %d is running the same code.\n", getpid());
+    }
+
+    return 0;
+}
+
+
+12.same program diff. code
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        printf("Fork failed!\n");
+    }
+    else if (pid == 0) {
+        printf("Child Process: PID = %d\n", getpid());
+        printf("Child is executing different code.\n");
+    } 
+    else {
+        printf("Parent Process: PID = %d\n", getpid());
+        printf("Parent is executing different code.\n");
+    }
+
+    return 0;
+}
+
+
+13.parent waits for child
+
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/wait.h>
+
+int main() {
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        printf("Fork failed!\n");
+    }
+    else if (pid == 0) {
+        printf("Child (PID: %d) is running.\n", getpid());
+        sleep(2);
+        printf("Child finished.\n");
+    }
+    else {
+        wait(NULL);   // parent waits for child
+        printf("Parent (PID: %d) waited for child.\n", getpid());
+    }
+
+    return 0;
+}
+
+
+
+
